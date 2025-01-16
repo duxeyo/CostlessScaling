@@ -6,8 +6,8 @@
 #include <vector>
 #include <windows.h>
 
-uint8_t pat[] =   { 0x83, 0xff, 0xff, 0xff, 0xff, 0x0f, 0x95, 0xc0, 0x48, 0x8b, 0x8d };
-uint8_t patch[] = { 0xb0, 0x01, 0x90 };
+uint8_t pat[] =   { 0x48, 0x8d, 0x0d, 0xff, 0xff, 0xff, 0xff, 0xe8, 0xff, 0xff, 0xff, 0xff, 0xe8, 0xff, 0xff, 0xff, 0xff, 0x84, 0xc0 };
+uint8_t patch[] = { 0x39, 0xc0, 0x0f, 0x85 };
 
 bool wildcard_compare(const uint8_t &a, const uint8_t &b) {
     return (b == 0xFF) || (a == b);
@@ -47,7 +47,7 @@ int run_patcher(int argc, char *argv[]) {
     printf("[+] pattern found at 0x%llx\n", uint64_t(scan._Ptr - buf.data()));
     std::filesystem::copy(path, backup_path);
 
-    memcpy(scan._Ptr + 5, patch, sizeof(patch));
+    memcpy(scan._Ptr + 17, patch, sizeof(patch));
     printf("[+] patch applied\n");
 
     std::ofstream out(path, std::ios::binary | std::ios::out);
